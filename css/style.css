@@ -28,3 +28,24 @@ div#background, body {
     border-bottom: 1px solid #ddd;
     cursor: pointer;
 }
+
+@media print {
+
+    @page { margin: 0.5cm }
+
+    body {
+        transform: scale(.5);
+    }
+    
+    .container, .container-md, .container-sm {
+        max-width: 97%;
+    }
+    
+    .mt-3 {
+        margin-top: 6%!important;
+    }
+
+    #advice, #search-box{
+        display: none !important;
+    }
+}

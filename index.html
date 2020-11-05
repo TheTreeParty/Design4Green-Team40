@@ -16,15 +16,18 @@
     <div id="background"></div>
 
     <div id="container" class="d-flex flex-column mt-5 mb-5 ml-5 mr-5">
-        <div id="search-box" class="d-flex flex-row bg-light p-3 align-items-center rounded shadow-sm">
-            <h1 class="h3 mb-0">Indice de fragilité numérique</h1>
+        <div id="search-box" class="d-flex flex-row bg-light p-3 align-items-center rounded shadow-sm justify-content-between">
+            <div class="flex-item d-flex flex-row align-items-center">
+                <h1 class="h3 mb-0">Indice de fragilité numérique</h1>
 
-            <button id="search-button" class="ml-3 search-button btn btn-outline-secondary rounded dropdown-toggle"
-                data-toggle="modal" data-target="#search-dropdown" aria-haspopup="true">
-                Rechercher
-            </button>
+                <button id="search-button" class="ml-3 search-button btn btn-outline-secondary rounded dropdown-toggle"
+                    data-toggle="modal" data-target="#search-dropdown" aria-haspopup="true">
+                    Rechercher
+                </button>
+            </div>
 
-            <button id="print-page" class="btn btn-outline-secondary ml-3">
+
+            <button id="print-page" class="flex-item btn btn-outline-secondary ml-3" onclick="window.print()">
                 Imprimer cette page
             </button>
         </div>
@@ -44,14 +47,14 @@
                             lesquels des populations auront des difficultés financières à y accéder. </div>
                     </div>
                     <div class="col-sm p-3">
-                        <div class="lead">Compétences numériques</div>
-                        <div class="text-muted"> Identifier des populations parmi lesquelles s'observe une fréquence
-                            d'illectronisme ou difficulté à utiliser internet. </div>
-                    </div>
-                    <div class="col-sm p-3">
                         <div class="lead">Compétences administratives</div>
                         <div class="text-muted"> Identifier des populations parmi lesquelles s'observent des difficultés
                             à accomplir des procédures administratives.</div>
+                    </div>
+                    <div class="col-sm p-3">
+                        <div class="lead">Compétences numériques</div>
+                        <div class="text-muted"> Identifier des populations parmi lesquelles s'observe une fréquence
+                            d'illectronisme ou difficulté à utiliser internet. </div>
                     </div>
                 </div>
             </div>
@@ -76,6 +79,21 @@
 
 
     <div id="prototypes" class="d-none">
+        <div id="commune-spinner-prototype" class="p-0 bg-light mt-3 rounded shadow-sm">
+            <div class="result-table-head p-3 d-flex flex-row align-items-center justify-content-between">
+                <div class="flex-item d-flex flex-row align-items-center">
+                    <div class="flex-item">
+                        <h1 class="commune-name h3 mb-0">Hello</h1>
+                    </div>
+                    <div class="flex-item ml-2">
+                        <div class="spinner-border text-secondary" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div id="suggestion-item-prototype" class="suggestion-item d-flex flex-row align-items-center p-3"
             data-dismiss="modal">
             <div class="flex-item">
@@ -114,8 +132,8 @@
 
             </div>
 
-            <div class="scores-table container p-0">
-                <div class="score-table-head row border-top">
+            <div class="scores-table p-0">
+                <div class="score-table-head d-flex flex-row border-top">
                     <div class="head-column col-sm p-3 border-right">
                         <span class="lead text-muted">Score</span>
                     </div>
@@ -136,17 +154,17 @@
                     </div>
 
                 </div>
-                <div class="score-row-commune row border-top">
+                <div class="score-row-commune d-flex flex-row border-top">
                     <div class="commune-score-head-row col-sm p-3 border-right align-items-center">
                         <span class="lead">Moyenne de la commune</span>
                     </div>
                 </div>
-                <div class="score-row-departement row border-top">
+                <div class="score-row-departement d-flex flex-row border-top">
                     <div class="col-sm p-3 border-right align-items-center">
                         <span class="lead">Moyenne du département</span>
                     </div>
                 </div>
-                <div class="score-row-region row border-top border-bottom">
+                <div class="score-row-region d-flex flex-row border-top border-bottom">
                     <div id="region-score-head-row"
                         class="commune-score-item col-sm p-3 border-right align-items-center">
                         <span class="lead">Moyenne de la région</span>

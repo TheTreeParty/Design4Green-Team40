@@ -110,9 +110,14 @@ function populateDeltaRowDOM(deltaRow, statistics, communeStatistics) {
     });
 }
 
-function onSuggestionItemClick(communeId) {
+function onSuggestionItemClick({ _id, commune_name, postal_code }) {
+    const results = $('#results');
     const modal = new bootstrap.Modal(document.getElementById('search-dropdown'));
     modal.dispose();
+
+    const spinner = getIdClone('#commune-spinner-prototype');
+    spinner.find('h1.commune-name').text(commune_name);
+    results.prepend(spinner);
 
     $('#search-input').val('');
     suggestions.empty();
@@ -123,7 +128,7 @@ function onSuggestionItemClick(communeId) {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-            id: communeId
+            id: _id
         })
     })
         .then(data => data.json())
@@ -161,7 +166,7 @@ function onSuggestionItemClick(communeId) {
                 copy.remove();
             });
 
-            $('#results').prepend(copy);
+            spinner.replaceWith(copy);
         });
 }
 
@@ -171,12 +176,13 @@ function fetchSuggestions(inputText) {
         .then(data => {
             suggestions.empty();
 
-            data.map(({ _id, commune_name, postal_code }) => {
+            data.map((data) => {
+                const { _id, commune_name, postal_code } = data;
                 const copy = getIdClone("#suggestion-item-prototype");
                 copy.find('h5.suggestion-item-commune-name').text(commune_name);
                 copy.find('div.suggestion-item-post-code').text(postal_code);
                 suggestions.append(copy);
-                copy.click(() => onSuggestionItemClick(_id));
+                copy.click(() => onSuggestionItemClick(data));
             });
         });
 }
