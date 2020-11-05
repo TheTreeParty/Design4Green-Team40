@@ -1,0 +1,30 @@
+div#background, body {
+    background-color: #f3f3f3;
+    position: absolute;
+    top: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: -1;
+}
+
+.light-border {
+    border-color: #ddd;
+}
+
+#search-input {
+    height: 64px;
+    font-size: 1em;
+}
+
+.suggestion-item {
+    transition: 100ms all;
+    border-top: 1px solid transparent;
+    border-bottom: 1px solid transparent;
+}
+
+.suggestion-item:hover {
+    background: #fdfdfd;
+    border-top: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
+    cursor: pointer;
+}
