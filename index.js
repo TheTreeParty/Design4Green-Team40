@@ -4,7 +4,6 @@ const path = require('path');
 const http = require('http');
 const mongoose = require('mongoose');
 const CommuneSchema = require('./commune_schema.js');
-const { query } = require('express');
 
 
 const MONGODB_DB_NAME = 'digitalfragility'
@@ -70,7 +69,7 @@ app.get("/search", (req, res) => {
 
     Commune
         .find(dbQueryParams, querySelect)
-        .limit(10)
+        .limit(AUTOCOMPLETE_LIMIT)
         .exec((err, result) => {
             if (err) {
                 res.status(500);
@@ -88,6 +87,10 @@ async function fetchCommuneReport(id) {
         return avg + value / length;
     }
 
+    function round(number) {
+        return parseFloat(number.toFixed(2));
+    }
+
     const Commune = mongoose.model(COMMUNE_SCORE_COLLECTION_NAME, CommuneSchema);
     const targetCommune = await Commune.findById(id);
 
@@ -99,20 +102,20 @@ async function fetchCommuneReport(id) {
         region_name: targetCommune.region_name
     });
 
-    const department = {
-        score_global: communesInDepartment.map(c => c.score_global).reduce(average, 0),
-        acces_information: communesInDepartment.map(c => c.acces_information).reduce(average, 0),
-        acces_interface_numeriques: communesInDepartment.map(c => c.acces_interface_numeriques).reduce(average, 0),
-        competences_administratives: communesInDepartment.map(c => c.competences_administratives).reduce(average, 0),
-        competences_numeriques: communesInDepartment.map(c => c.competences_numeriques).reduce(average, 0)
+    const departement = {
+        score_global: round(communesInDepartment.map(c => c.score_global).reduce(average, 0)),
+        acces_information: round(communesInDepartment.map(c => c.acces_information).reduce(average, 0)),
+        acces_interface_numeriques: round(communesInDepartment.map(c => c.acces_interface_numeriques).reduce(average, 0)),
+        competences_administratives: round(communesInDepartment.map(c => c.competences_administratives).reduce(average, 0)),
+        competences_numeriques: round(communesInDepartment.map(c => c.competences_numeriques).reduce(average, 0))
     };
 
     const region = {
-        score_global: communesInRegion.map(c => c.score_global).reduce(average, 0),
-        acces_information: communesInRegion.map(c => c.acces_information).reduce(average, 0),
-        acces_interface_numeriques: communesInRegion.map(c => c.acces_interface_numeriques).reduce(average, 0),
-        competences_administratives: communesInRegion.map(c => c.competences_administratives).reduce(average, 0),
-        competences_numeriques: communesInRegion.map(c => c.competences_numeriques).reduce(average, 0)
+        score_global: round(communesInRegion.map(c => c.score_global).reduce(average, 0)),
+        acces_information: round(communesInRegion.map(c => c.acces_information).reduce(average, 0)),
+        acces_interface_numeriques: round(communesInRegion.map(c => c.acces_interface_numeriques).reduce(average, 0)),
+        competences_administratives: round(communesInRegion.map(c => c.competences_administratives).reduce(average, 0)),
+        competences_numeriques: round(communesInRegion.map(c => c.competences_numeriques).reduce(average, 0))
     }
 
     const report = {
@@ -128,8 +131,8 @@ async function fetchCommuneReport(id) {
                 competences_administratives: targetCommune.competences_administratives,
                 competences_numeriques: targetCommune.competences_numeriques
             },
-            department: department,
-            region: region
+            departement,
+            region
         }
     };
 
