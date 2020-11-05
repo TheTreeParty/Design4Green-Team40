@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Hello</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha2/css/bootstrap.min.css"
+        integrity="sha384-DhY6onE6f3zzKbjUPRc2hOzGAdEf4/Dz+WJwBvEYL/lkkIsI3ihufq9hk9K4lVoK" crossorigin="anonymous">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha2/js/bootstrap.bundle.min.js"
+        integrity="sha384-BOsAfwzjNJHrJ8cZidOg56tcQWfp6y72vEJ8xQ9w6Quywb24iOsW913URv1IS4GD"
+        crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+
+<style>
+    div#background {
+        background-color: #f3f3f3;
+        position: absolute;
+        top: 0;
+        width: 100vw;
+        height: 100vh;
+        z-index: -1;
+    }
+
+    #search-button {
+        text-align: left;
+        background: #f8f8f8;
+        transition: 200ms all;
+    }
+
+    #search-button:hover {
+        cursor: text;
+        background: #fdfdfd;
+    }
+
+    .light-border {
+        border-color: #ddd;
+    }
+
+    #search-dropdown {
+        top: -64px !important;
+    }
+
+    #search-input {
+        height: 64px;
+        font-size: 1.2em;
+    }
+
+    .suggestion-item {
+        transition: 100ms all;
+        border-top: 1px solid transparent;
+        border-bottom: 1px solid transparent;
+    }
+
+    .suggestion-item:hover {
+        background: #fdfdfd;
+        border-top: 1px solid #ddd;
+        border-bottom: 1px solid #ddd;
+        cursor: pointer;
+    }
+</style>
+
+<body>
+    <div id="background"></div>
+
+    <div id="container" class="d-flex flex-column mt-5 mb-5 ml-5 mr-5">
+        <div id="search-box" class="btn-group">
+            <button id="search-button"
+                class="search-button btn btn-lg text-muted rounded border-0 dropdown-toggle p-3 shadow-sm"
+                data-toggle="dropdown" aria-haspopup="true">
+                Rechercher le nom d'une commune ou son code postal
+            </button>
+
+            <div id="search-dropdown" class="dropdown-menu w-100 p-0 bg-light shadow-lg">
+                <input id="search-input" type="text" class="form-control rounded-top"
+                    placeholder="Rechercher le nom d'une commune ou son code postal">
+
+                <div id="suggestions" class="mt-3 mb-3">
+                </div>
+            </div>
+        </div>
+
+        <div id="results" class="mt-3">
+            <div id="result-table" class="p-0 bg-light mt-3 rounded shadow-sm">
+                <div id="table-head" class="p-3 d-flex flex-row align-items-center">
+                    <div id="commune-name" class="flex-item">
+                        <h1 class="h3 mb-0">Chantilly</h1>
+                    </div>
+                    <div id="commune-details" class="ml-2 flex-item lead text-muted">
+                        60500 Oise, Hauts-de-France
+                    </div>
+                </div>
+
+                <div id="scores-table" class="container p-0">
+                    <div id="score-table-head" class="row border-top">
+                        <div id="head-column" class="col-sm p-3 border-right">
+                            <span class="lead text-muted">Score</span>
+                        </div>
+                        <div id="head-column-globale" class="col-sm p-3 lead text-muted">
+                            Score globale
+                        </div>
+                        <div id="head-column-accinformation" class="col-sm p-3 lead text-muted">
+                            Accès à l'information
+                        </div>
+                        <div id="head-column-accnumeriques" class="col-sm p-3 lead text-muted">
+                            Accès aux interfaces numériques
+                        </div>
+                        <div id="head-column-compadministratives" class="col-sm p-3 lead text-muted">
+                            Compétences administratives
+                        </div>
+                        <div id="head-column-compnumeriques" class="col-sm p-3 lead text-muted">
+                            Compétences numériques
+                        </div>
+
+                    </div>
+                    <div class="score-row row border-top">
+                        <div id="commune-score-head-row" class="col-sm p-3 border-right align-items-center">
+                            <span class="lead">Moyenne de la commune</span>
+                        </div>
+                        <div id="commune-score-global" class="col-sm d-flex flex-column p-3">
+                            <div class="commune-score-digits flex-item display-6">
+                                135
+                            </div>
+                        </div>
+                        <div id="commune-score-accinformation" class="col-sm d-flex flex-column p-3">
+                            <div class="commune-score-digits flex-item display-6">
+                                87
+                            </div>
+
+                        </div>
+                        <div id="commune-score-accnumeriques" class="col-sm d-flex flex-column p-3">
+                            <div class="commune-score-digits flex-item display-6">
+                                90
+                            </div>
+                        </div>
+                        <div id="commune-score-compadministratives" class="col-sm d-flex flex-column p-3">
+                            <div class="commune-score-digits flex-item display-6">
+                                76
+                            </div>
+                        </div>
+                        <div id="commune-score-compnumeriques" class="col-sm d-flex flex-column p-3">
+                            <div class="commune-score-digits flex-item display-6">
+                                91
+                            </div>
+                        </div>
+                    </div>
+                    <div class="score-row row border-top">
+                        <div id="department-score-head-row" class="col-sm p-3 border-right align-items-center">
+                            <span class="lead">Moyenne du département</span>
+                        </div>
+                        <div class="col-sm d-flex flex-column p-3">
+                            <div class="commune-score-digits flex-item display-flex">
+                                <div class="d-flex flex-row align-items-center">
+                                    <div id="department-score-global" class="flex-item display-6">120</div>
+                                    <div class="flex-item lead text-muted ml-2">-15▼</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="department-score-accinformation" class="col-sm d-flex flex-column p-3">
+                            <div class="commune-score-digits flex-item display-6">
+                                87
+                            </div>
+                        </div>
+                        <div id="department-score-accnumeriques" class="col-sm d-flex flex-column p-3">
+                            <div class="commune-score-digits flex-item display-6">
+                                90
+                            </div>
+                        </div>
+                        <div id="departement-score-compadministratives" class="col-sm d-flex flex-column p-3">
+                            <div class="commune-score-digits flex-item display-6">
+                                76
+                            </div>
+                        </div>
+                        <div id="department-score-compnumeriques" class="col-sm d-flex flex-column p-3">
+                            <div class="commune-score-digits flex-item display-6">
+                                91
+                            </div>
+                        </div>
+                    </div>
+                    <div class="score-row row border-top border-bottom">
+                        <div id="region-score-head-row"
+                            class="commune-score-item col-sm p-3 border-right align-items-center">
+                            <span class="lead">Moyenne de la région</span>
+                        </div>
+                        <div class="commune-score-item col-sm d-flex flex-column p-3">
+                            <div class="d-flex flex-row align-items-center">
+                                <div id="region-score-global" class="flex-item display-6">140</div>
+                                <div class="flex-item lead text-muted ml-2">+5▲</div>
+                            </div>
+                        </div>
+                        <div id="region-score-accinformation" class="commune-score-item col-sm d-flex flex-column p-3">
+                            <div class="commune-score-digits flex-item display-6">
+                                87
+                            </div>
+                        </div>
+                        <div id="region-score-accnumeriques" class="commune-score-item col-sm d-flex flex-column p-3">
+                            <div class="commune-score-digits flex-item display-6">
+                                90
+                            </div>
+                        </div>
+                        <div id="region-score-administratives" class="commune-score-item col-sm d-flex flex-column p-3">
+                            <div class="commune-score-digits flex-item display-6">
+                                76
+                            </div>
+                        </div>
+                        <div id="region-score-compnumeriques" class="commune-score-item col-sm d-flex flex-column p-3">
+                            <div class="commune-score-digits flex-item display-6">
+                                91
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="conclusion" class="row p-3">
+                    <span class="blockquote text-muted mb-0">Le score globale de la commune est à <span
+                            class="text-success">plus élevé</span> que celui de son département et est <span
+                            class="text-danger">moins élevé</span> que sa région.</span>
+                </div>
+            </div>
+            <div id="result-table" class=" bg-light mt-3 rounded shadow-sm">
+                <div id="scores-table" class="container row">
+                    <div class="col-sm p-3">
+                        <div class="lead">Accès à l'information</div>
+                        <div class="text-muted"> Identifier des territoires mal couverts par une offre de service
+                            d'information ou des populations qui auront des difficultés à comprendre l'information.
+                        </div>
+                    </div>
+                    <div class="col-sm p-3">
+                        <div class="lead">Accès aux interfaces numériques</div>
+                        <div class="text-muted"> Identifier des territoires mal couverts par les réseaux ou dans
+                            lesquels des populations auront des difficultés financières à y accéder. </div>
+                    </div>
+                    <div class="col-sm p-3">
+                        <div class="lead">Compétences numériques</div>
+                        <div class="text-muted"> Identifier des populations parmi lesquelles s'observe une fréquence
+                            d'illectronisme ou difficulté à utiliser internet. </div>
+                    </div>
+                    <div class="col-sm p-3">
+                        <div class="lead">Compétences administratives</div>
+                        <div class="text-muted"> Identifier des populations parmi lesquelles s'observent des difficultés
+                            à accomplir des procédures administratives.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- <div id="testdiv">
+     
+    </div> -->
+
+
+    <div id="prototypes" class="d-none">
+        <div id="suggestion-item-prototype" class="suggestion-item d-flex flex-row align-items-center p-3">
+            <div class="flex-item">
+                <h5 class="suggestion-item-commune-name mb-0"></h5>
+            </div>
+            <div class="flex-item ml-2">
+                <div class="suggestion-item-post-code lean text-muted"></div>
+            </div>
+        </div>
+
+
+        <div id="score-digits-prototype" class=" col-sm d-flex flex-column p-3">
+            <div class="d-flex flex-row align-items-center">
+                <div class="score-digits-value flex-item display-6">140</div>
+                <div class="score-digits-delta flex-item lead text-muted ml-2">+5▲</div>
+            </div>
+        </div>
+
+
+
+        <div id="commune-result-prototype" class="p-0 bg-light mt-3 rounded shadow-sm">
+            <div class="result-table-head p-3 d-flex flex-row align-items-center">
+                <div class="flex-item">
+                    <h1 class="commune-name h3 mb-0">Chantilly</h1>
+                </div>
+                <div class="commune-details ml-2 flex-item lead text-muted">
+                    60500 Oise, Hauts-de-France
+                </div>
+            </div>
+
+            <div class="scores-table container p-0">
+                <div class="score-table-head row border-top">
+                    <div class="head-column col-sm p-3 border-right">
+                        <span class="lead text-muted">Score</span>
+                    </div>
+                    <div class="head-column-globale col-sm p-3 lead text-muted">
+                        Score globale
+                    </div>
+                    <div class="head-column-accinformation col-sm p-3 lead text-muted">
+                        Accès à l'information
+                    </div>
+                    <div class="head-column-accnumeriques col-sm p-3 lead text-muted">
+                        Accès aux interfaces numériques
+                    </div>
+                    <div class="head-column-compadministratives col-sm p-3 lead text-muted">
+                        Compétences administratives
+                    </div>
+                    <div class="head-column-compnumeriques col-sm p-3 lead text-muted">
+                        Compétences numériques
+                    </div>
+
+                </div>
+                <div class="score-row row border-top">
+                    <div class="commune-score-head-row col-sm p-3 border-right align-items-center">
+                        <span class="lead">Moyenne de la commune</span>
+                    </div>
+                </div>
+                <div class="score-row row border-top">
+                    <div class="col-sm p-3 border-right align-items-center">
+                        <span class="lead">Moyenne du département</span>
+                    </div>
+                    <div class="col-sm d-flex flex-column p-3">
+                        <div class="commune-score-digits flex-item display-flex">
+                            <div class="d-flex flex-row align-items-center">
+                                <div id="department-score-global" class="flex-item display-6">120</div>
+                                <div class="department-score-global-delta flex-item lead text-muted ml-2">-15▼</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="score-row row border-top border-bottom">
+                    <div id="region-score-head-row"
+                        class="commune-score-item col-sm p-3 border-right align-items-center">
+                        <span class="lead">Moyenne de la région</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row p-3">
+                <span class="blockquote text-muted mb-0">Le score globale de la commune est à <span
+                        class="text-success">plus élevé</span> que celui de son département et est <span
+                        class="text-danger">moins élevé</span> que sa région.</span>
+            </div>
+        </div>
+    </div>
+    <script>
+        const DOWN_TRIANGLE = "▼";
+        const UP_TRIANGLE = "▲";
+        const suggestions = $('#suggestions');
+
+        function onSuggestionItemClick(communeId) {
+            console.log("Searching for", communeId);
+
+            fetch('/commune-report', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    id: communeId
+                })
+            })
+                .then(data => data.json())
+                .then(data => {
+                    const copy = $('#commune-result-prototype').clone();
+                    copy.removeAttr('id');
+                    copy.find('h1.commune-name').text(data.commune_name);
+                    copy.find('.commune-details').text(`${data.postal_code} ${data.department_name}, ${data.region_name}`);
+
+
+                    const 
+
+                    $('#results').prepend(copy);
+                });
+        }
+
+        function fetchSuggestions(inputText) {
+            fetch(`/search?query=${inputText}`)
+                .then(data => data.json())
+                .then(data => {
+                    suggestions.empty();
+
+                    data.map(({ _id, commune_name, postal_code }) => {
+                        const copy = $("#suggestion-item-prototype").clone();
+                        copy.removeAttr("id");
+                        copy.find('h5.suggestion-item-commune-name').text(commune_name);
+                        copy.find('div.suggestion-item-post-code').text(postal_code);
+                        suggestions.append(copy);
+                        copy.click(() => onSuggestionItemClick(_id));
+                    });
+                });
+        }
+
+        $(() => {
+            const searchButton = document.getElementById('search-button');
+            searchButton.addEventListener('show.bs.dropdown', () => {
+                $("#search-input").focus();
+                $('#search-input').val('');
+                fetchSuggestions();
+            })
+        });
+
+        $('#search-input').on('input', () => {
+            const inputText = $('#search-input').val();
+            fetchSuggestions(inputText);
+        })
+
+        // function change(s1, s2){document.getElementById (s1)=s2;	
+        // }
+        $.getJSON("http://146.59.196.18/testfunc", function (json) {
+
+
+            //TMDb is nice enough to return a message if nothing was found, so we can base our if statement on this information
+
+            if (json != "Nothing found.") {
+                console.log(json);
+
+                //Update the interface
+                // change('commune-name',json.commune_name);
+                // probable change needed 
+
+                $('#commune-name>h1').text(json.commune_name);
+                $('#commune-details').text(json.zip_code + " " + json.departement + ", " + json.region);
+                $('#commune-score-global>div').text(json.statistics.commune.sco_globale);
+                $('#commune-score-accinformation>div').text(json.statistics.commune.acc_information);
+                $('#commune-score-accnumeriques>div').text(json.statistics.commune.acc_numeriques);
+                $('#commune-score-compadministratives>div').text(json.statistics.commune.comp_administratives);
+                $('#commune-score-compnumeriques>div').text(json.statistics.commune.comp_numeriques);
+                $('#department-score-global').text(json.statistics.departement.sco_globale);
+                $('#department-score-accinformation>div').text(json.statistics.departement.acc_information);
+                $('#department-score-accnumeriques>div').text(json.statistics.departement.acc_numeriques);
+                $('#department-score-compadministratives>div').text(json.statistics.departement.comp_administratives);
+                $('#department-score-compnumeriques>div').text(json.statistics.departement.comp_numeriques);
+                $('#region-score-global').text(json.statistics.region.sco_globale);
+                $('#region-score-accinformation>div').text(json.statistics.region.acc_information);
+                $('#region-score-accnumeriques>div').text(json.statistics.region.acc_numeriques);
+                $('#region-score-compadministratives>div').text(json.statistics.region.comp_administratives);
+                $('#region-score-compnumeriques>div').text(json.statistics.region.comp_numeriques);
+            }
+        });
+    </script>
+</body>
+
+</html>
