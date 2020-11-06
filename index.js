@@ -3,8 +3,8 @@ const bodyParser = require('body-parser');
 const path = require('path');
 const http = require('http');
 const mongoose = require('mongoose');
+const compression = require('compression');
 const CommuneSchema = require('./commune_schema.js');
-
 
 const MONGODB_DB_NAME = 'digitalfragility'
 const MONGODB_CONNECTION_URL = `localhost:27017`;
@@ -19,12 +19,19 @@ const AUTOCOMPLETE_LIMIT = 10;
 // Set up the express app
 const app = express();
 
+app.use(compression());
 app.use(bodyParser.json());
 
 // Index routing: http://146.59.196.18:80/
 app.get('/', (req, res) => {
     res.status(200).sendFile(
         (path.join(__dirname + '/index.html'))
+    );
+});
+
+app.get('/source.zip', (req, res) => {
+    res.status(200).sendFile(
+        (path.join(__dirname + '/source.zip'))
     );
 });
 

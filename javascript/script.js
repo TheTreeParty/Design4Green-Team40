@@ -144,7 +144,7 @@ function onSuggestionItemClick({ _id, commune_name, postal_code }) {
             populateDeltaRowDOM(copy.find('.score-row-region'), region, commune);
 
             function getConclusionTextForDelta(delta) {
-                return deltaScoreGlobalDept < 0 ? lOWER_TEXT : HIGHER_TEXT;
+                return delta < 0 ? lOWER_TEXT : HIGHER_TEXT;
             }
 
             function getSpanClassForDelta(delta) {

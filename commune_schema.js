@@ -1,6 +1,6 @@
 const { Schema } = require('mongoose');
 
-module.exports = new Schema({
+const CommuneSchema = new Schema({
     department_number: String,
     department_name: String,
     region_name: String,
@@ -15,4 +15,8 @@ module.exports = new Schema({
     competences_numeriques: Number,
     global_acces: Number,
     global_competences: Number,
-})
+});
+
+
+CommuneSchema.index({ commune_name: 1, postal_code: 1 });
+module.exports = CommuneSchema;

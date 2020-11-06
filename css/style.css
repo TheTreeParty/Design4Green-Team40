@@ -7,6 +7,12 @@ div#background, body {
     z-index: -1;
 }
 
+#container {
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 1200px;
+}
+
 .light-border {
     border-color: #ddd;
 }
@@ -29,23 +35,47 @@ div#background, body {
     cursor: pointer;
 }
 
+.score-digits-value.lead {
+    font-size: 2em;
+}
+
+.score-table-head .lead, .score-row-head .lead, .conclusion.lead, .score-digits-delta.lead {
+    font-size: 1rem;
+}
+
 @media print {
 
-    @page { margin: 0.5cm }
-
-    body {
-        transform: scale(.5);
+    #container {
+        margin: 0 !important;
     }
-    
-    .container, .container-md, .container-sm {
-        max-width: 97%;
+
+    #results {
+        width: 100vw;
+        height: 100vh;
+        margin-top: 0 !important;
+    }
+
+    .commune-report {
+        margin-top: 0 !important;
+    }
+
+    .score-digits-value, .score-digits-display.lead, .score-digits-delta.lead {
+        font-size: 0.8rem !important;
+    }
+
+    .lead, .blockquote, .commune-name {
+        font-size: 0.8rem !important;
     }
     
     .mt-3 {
-        margin-top: 6%!important;
+        margin-top: 5px!important;
     }
 
-    #advice, #search-box{
+    #advice, #search-box, button {
         display: none !important;
     }
+    .commune-report{
+	page-break-inside:avoid!important;
+    }
+
 }
